@@ -12,7 +12,11 @@
         "Assets/Models": true,
         "Assets/Prefabs": true,
         "Assets/Scenes": true,
+        "Assets/TextMesh Pro": true,
         "Packages": true,
         "ProjectSettings": true,
-    }
+    },
+    "cSpell.words": [
+        "Behaviour"
+    ]
 }
