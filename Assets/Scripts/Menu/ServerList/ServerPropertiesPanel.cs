@@ -71,5 +71,10 @@ namespace PaperDeck.Menu.ServerList
             m_NameInput.text = "";
             m_IPInput.text = "";
         }
+
+        public void RefreshServerButton()
+        {
+            m_Selected?.TryReconnect();
+        }
     }
 }
