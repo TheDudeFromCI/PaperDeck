@@ -1,22 +1,23 @@
 {
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "Library": true,
-        "Logs": true,
-        "**/*.meta": true,
-        "Assets/Materials": true,
-        "Assets/Models": true,
-        "Assets/Prefabs": true,
-        "Assets/Scenes": true,
-        "Assets/TextMesh Pro": true,
-        "Packages": true,
-        "ProjectSettings": true,
-    },
-    "cSpell.words": [
-        "Behaviour"
-    ]
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "Library": true,
+    "Logs": true,
+    "**/*.meta": true,
+    "Assets/Materials": true,
+    "Assets/Models": true,
+    "Assets/Prefabs": true,
+    "Assets/Scenes": true,
+    "Assets/TextMesh Pro": true,
+    "Packages": true,
+    "ProjectSettings": true,
+    "Temp": true,
+    "**/*.csproj": true,
+    "**/*.sln": true
+  },
+  "cSpell.words": ["Behaviour"]
 }

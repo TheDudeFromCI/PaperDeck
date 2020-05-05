@@ -32,6 +32,7 @@ namespace PaperDeck.Menu.ServerList
         private Color m_DefaultColor;
         private string m_ServerName;
         private string m_ServerIP;
+        private IEnumerator m_ServerConnectionCoroutine;
 
         public string ServerName
         {
@@ -54,13 +55,8 @@ namespace PaperDeck.Menu.ServerList
 
         void Start()
         {
-            m_ConnectionImage.sprite = m_ConnectingIcon;
-            m_PlayerList.SetActive(false);
-
-            m_IPTextBox.text = m_ServerIP;
             m_DefaultColor = m_BackgroundImage.color;
-
-            StartCoroutine(DoCheckServerStatus());
+            TryReconnect();
         }
 
         IEnumerator DoCheckServerStatus()
@@ -98,6 +94,21 @@ namespace PaperDeck.Menu.ServerList
                 m_BackgroundImage.color = m_SelectedColor;
             else
                 m_BackgroundImage.color = m_DefaultColor;
+        }
+
+        public void TryReconnect()
+        {
+            m_ConnectionImage.sprite = m_ConnectingIcon;
+            m_PlayerList.SetActive(false);
+
+            m_NameTextBox.text = m_ServerName;
+            m_IPTextBox.text = m_ServerIP;
+
+            if (m_ServerConnectionCoroutine != null)
+                StopCoroutine(m_ServerConnectionCoroutine);
+
+            m_ServerConnectionCoroutine = DoCheckServerStatus();
+            StartCoroutine(m_ServerConnectionCoroutine);
         }
 
         static System.Random random = new System.Random();

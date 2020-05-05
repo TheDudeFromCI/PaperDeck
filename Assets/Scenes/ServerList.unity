@@ -423,6 +423,7 @@ GameObject:
   - component: {fileID: 182375434}
   - component: {fileID: 182375436}
   - component: {fileID: 182375435}
+  - component: {fileID: 182375437}
   m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
@@ -485,6 +486,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182375433}
   m_CullTransparentMesh: 0
+--- !u!114 &182375437
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182375433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 237fa56f78799689bb6324cd2c750c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Selector: {fileID: 133264944}
 --- !u!1 &244388836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,6 +1145,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NameInput: {fileID: 508129957}
   m_IPInput: {fileID: 51977594}
+  m_AddServerButton: {fileID: 2060746767}
+  m_RemoveServerButton: {fileID: 1305038385}
+  m_RemoveServerButtonRoot: {fileID: 1482728530}
+  m_ServerListPopulator: {fileID: 133264943}
 --- !u!1 &673901760
 GameObject:
   m_ObjectHideFlags: 0
@@ -2143,7 +2161,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1283748246}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519674667}
+        m_MethodName: AddServerButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1283748246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2502,7 +2531,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1482728533}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519674667}
+        m_MethodName: RemoveServerButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1482728533
 MonoBehaviour:
   m_ObjectHideFlags: 0

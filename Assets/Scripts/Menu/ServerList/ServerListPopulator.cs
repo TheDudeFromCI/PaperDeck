@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -11,20 +12,47 @@ namespace PaperDeck.Menu.ServerList
         [SerializeField] private ServerListElement m_ServerListElementPrefab;
         [SerializeField] private ServerElementSelection m_ElementSelection;
 
+        private readonly List<ServerListElement> m_Elements = new List<ServerListElement>();
+
         void Awake()
         {
             //TODO Load from config
 
             for (int i = 0; i < 5; i++)
             {
-                var elem = Instantiate(m_ServerListElementPrefab);
-                elem.transform.SetParent(transform, false);
+                var name = RandomString(random.Next() % 20 + 3);
+                var ip = RandomString(random.Next() % 15 + 5);
 
-                elem.ServerName = RandomString(random.Next() % 20 + 3);
-                elem.ServerIP = RandomString(random.Next() % 15 + 5);
-
-                m_ElementSelection.AddElement(elem);
+                AddServer(name, ip, false);
             }
+        }
+
+        public void AddServer(string name, string ip, bool save = true)
+        {
+            var elem = Instantiate(m_ServerListElementPrefab);
+            elem.transform.SetParent(transform, false);
+
+            elem.ServerName = name;
+            elem.ServerIP = ip;
+
+            m_ElementSelection.AddElement(elem);
+
+            if (save)
+                SaveConfig();
+        }
+
+        public void RemoveServer(ServerListElement elem, bool save = true)
+        {
+            Destroy(elem.gameObject);
+            m_ElementSelection.RemoveElement(elem);
+
+            if (save)
+                SaveConfig();
+        }
+
+        private void SaveConfig()
+        {
+            // TODO Save to config
         }
 
         private static System.Random random = new System.Random();

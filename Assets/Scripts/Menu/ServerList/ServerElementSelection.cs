@@ -27,6 +27,23 @@ namespace PaperDeck.Menu.ServerList
             m_Elements.Add(selection);
         }
 
+        public void RemoveElement(ServerListElement selection)
+        {
+            if (!m_Elements.Contains(selection))
+                return;
+
+            int oldIndex = m_Elements.IndexOf(selection);
+            m_Elements.Remove(selection);
+
+            if (m_Index > oldIndex)
+                m_Index--;
+            else if (m_Index == oldIndex)
+            {
+                m_Index = -1;
+                m_OnSelectionChange?.Invoke(Selected);
+            }
+        }
+
         public void Select(int index)
         {
             if (m_Index != -1)
