@@ -1,23 +1,29 @@
-using UnityEngine;
 using System.Linq;
+
+using UnityEngine;
+
+#pragma warning disable 649
 
 namespace PaperDeck.Menu.ServerList
 {
     public class ServerListPopulator : MonoBehaviour
     {
-        public ServerListElement m_ServerListElementPrefab;
+        [SerializeField] private ServerListElement m_ServerListElementPrefab;
+        [SerializeField] private ServerElementSelection m_ElementSelection;
 
         void Awake()
         {
             //TODO Load from config
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var elem = Instantiate(m_ServerListElementPrefab);
                 elem.transform.SetParent(transform, false);
 
-                elem.m_ServerName = RandomString(random.Next() % 30 + 10);
-                elem.m_ServerIP = RandomString(random.Next() % 15 + 5);
+                elem.ServerName = RandomString(random.Next() % 20 + 3);
+                elem.ServerIP = RandomString(random.Next() % 15 + 5);
+
+                m_ElementSelection.AddElement(elem);
             }
         }
 
@@ -26,7 +32,7 @@ namespace PaperDeck.Menu.ServerList
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 .-'+={}()[]_";
             return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+                .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

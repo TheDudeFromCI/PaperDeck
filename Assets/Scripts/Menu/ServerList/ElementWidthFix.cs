@@ -6,9 +6,9 @@ namespace PaperDeck.Menu.ServerList
     [ExecuteInEditMode]
     public class ElementWidthFix : MonoBehaviour
     {
-        private RectTransform rect;
-        private RectTransform parentRect;
-        private VerticalLayoutGroup layoutGroup;
+        private RectTransform m_Rect;
+        private RectTransform m_ParentRect;
+        private VerticalLayoutGroup m_LayoutGroup;
 
         void OnEnable()
         {
@@ -22,22 +22,22 @@ namespace PaperDeck.Menu.ServerList
 
         private void UpdateWidth()
         {
-            if (layoutGroup == null || rect == null || parentRect == null)
+            if (m_LayoutGroup == null || m_Rect == null || m_ParentRect == null)
             {
-                layoutGroup = GetComponentInParent<VerticalLayoutGroup>();
-                if (layoutGroup != null)
+                m_LayoutGroup = GetComponentInParent<VerticalLayoutGroup>();
+                if (m_LayoutGroup != null)
                 {
-                    parentRect = layoutGroup.GetComponent<RectTransform>();
-                    rect = GetComponent<RectTransform>();
-                    rect.pivot = new Vector2(0, 1);
-                    rect.sizeDelta = new Vector2(parentRect.rect.size.x - (layoutGroup.padding.left + layoutGroup.padding.right),
-                        rect.sizeDelta.y);
+                    m_ParentRect = m_LayoutGroup.GetComponent<RectTransform>();
+                    m_Rect = GetComponent<RectTransform>();
+                    m_Rect.pivot = new Vector2(0, 1);
+                    m_Rect.sizeDelta = new Vector2(m_ParentRect.rect.size.x - (m_LayoutGroup.padding.left + m_LayoutGroup.padding.right),
+                        m_Rect.sizeDelta.y);
                 }
             }
             else
             {
-                rect.sizeDelta = new Vector2(parentRect.rect.size.x - (layoutGroup.padding.left + layoutGroup.padding.right),
-                    rect.sizeDelta.y);
+                m_Rect.sizeDelta = new Vector2(m_ParentRect.rect.size.x - (m_LayoutGroup.padding.left + m_LayoutGroup.padding.right),
+                    m_Rect.sizeDelta.y);
             }
         }
     }

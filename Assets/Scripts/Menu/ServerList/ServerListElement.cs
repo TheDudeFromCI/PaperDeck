@@ -1,37 +1,64 @@
+using System.Collections;
+using System.Threading.Tasks;
+
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.UI;
-using System.Threading.Tasks;
-using TMPro;
-using System.Collections;
+
+#pragma warning disable 649
 
 namespace PaperDeck.Menu.ServerList
 {
     public class ServerListElement : MonoBehaviour
     {
         [Header("Settings")]
-        public string m_ServerName;
-        public string m_ServerIP;
-        public float m_ConnectionRotationSpeed = -360f;
+        [SerializeField] private float m_ConnectionRotationSpeed = -360f;
+        [SerializeField] private Color m_SelectedColor;
 
         [Header("Game Objects")]
-        public Image m_ConnectionImage;
-        public GameObject m_PlayerList;
-        public TextMeshProUGUI m_PlayerListValue;
-        public TextMeshProUGUI m_ServerNameValue;
-        public TextMeshProUGUI m_ServerIPValue;
+        [SerializeField] private Image m_ConnectionImage;
+        [SerializeField] private GameObject m_PlayerList;
+        [SerializeField] private TextMeshProUGUI m_PlayerListValue;
+        [SerializeField] private TextMeshProUGUI m_NameTextBox;
+        [SerializeField] private TextMeshProUGUI m_IPTextBox;
+        [SerializeField] private Image m_BackgroundImage;
 
         [Header("Icons")]
-        public Sprite m_ConnectedIcon;
-        public Sprite m_ConnectingIcon;
-        public Sprite m_FailedToConnectIcon;
+        [SerializeField] private Sprite m_ConnectedIcon;
+        [SerializeField] private Sprite m_ConnectingIcon;
+        [SerializeField] private Sprite m_FailedToConnectIcon;
+
+        private Color m_DefaultColor;
+        private string m_ServerName;
+        private string m_ServerIP;
+
+        public string ServerName
+        {
+            get => m_ServerName;
+            set
+            {
+                m_ServerName = value;
+                m_NameTextBox.text = value;
+            }
+        }
+        public string ServerIP
+        {
+            get => m_ServerIP;
+            set
+            {
+                m_ServerIP = value;
+                m_IPTextBox.text = value;
+            }
+        }
 
         void Start()
         {
             m_ConnectionImage.sprite = m_ConnectingIcon;
             m_PlayerList.SetActive(false);
 
-            m_ServerNameValue.text = m_ServerName;
-            m_ServerIPValue.text = m_ServerIP;
+            m_IPTextBox.text = m_ServerIP;
+            m_DefaultColor = m_BackgroundImage.color;
 
             StartCoroutine(DoCheckServerStatus());
         }
@@ -65,18 +92,26 @@ namespace PaperDeck.Menu.ServerList
                 m_ConnectionImage.sprite = m_FailedToConnectIcon;
         }
 
+        public void SetSelected(bool selected)
+        {
+            if (selected)
+                m_BackgroundImage.color = m_SelectedColor;
+            else
+                m_BackgroundImage.color = m_DefaultColor;
+        }
+
         static System.Random random = new System.Random();
         ServerConnection ConnectToServer(ServerConnection connection)
         {
             int time;
-            lock (random)
+            lock(random)
             {
                 time = random.Next() % 7000;
             }
 
             Task.Delay(time).Wait();
 
-            lock (random)
+            lock(random)
             {
                 connection.IsOnline = random.NextDouble() > 0.5;
 
