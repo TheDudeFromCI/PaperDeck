@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PaperDeck.Menu.Title
 {
@@ -6,7 +7,7 @@ namespace PaperDeck.Menu.Title
     {
         public void OpenServerList()
         {
-            Debug.Log("Opening server list menu");
+            SceneManager.LoadScene("ServerList");
         }
     }
 }

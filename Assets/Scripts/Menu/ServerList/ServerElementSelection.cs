@@ -53,7 +53,6 @@ namespace PaperDeck.Menu.ServerList
                 m_Elements[index].SetSelected(true);
 
             m_Index = index;
-
             m_OnSelectionChange?.Invoke(Selected);
         }
 
