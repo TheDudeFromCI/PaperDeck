@@ -111,29 +111,41 @@ namespace PaperDeck.Menu.ServerList
             StartCoroutine(m_ServerConnectionCoroutine);
         }
 
-        static System.Random random = new System.Random();
+        private (string address, int port) ParseIP(string ip)
+        {
+            var port = 23404;
+
+            if (ip.Contains(":"))
+            {
+                var split = ip.Split(':');
+                ip = split[0];
+                port = int.Parse(split[1]);
+            }
+
+            return (address: ip, port: port);
+        }
+
         ServerConnection ConnectToServer(ServerConnection connection)
         {
-            int time;
-            lock(random)
+            var ip = ParseIP(connection.IP);
+            var pingOp = new PingServerOperation(ip.address, ip.port);
+
+            try
             {
-                time = random.Next() % 7000;
+                pingOp.Connect();
+
+                // TODO Load server details
+
+                connection.IsOnline = true;
+                connection.MaxPlayers = 50;
+                connection.PlayersOnline = 2;
+            }
+            catch (System.Exception)
+            {
+                connection.IsOnline = false;
             }
 
-            Task.Delay(time).Wait();
-
-            lock(random)
-            {
-                connection.IsOnline = random.NextDouble() > 0.5;
-
-                if (connection.IsOnline)
-                {
-                    connection.MaxPlayers = (random.Next() % 20 + 1) * 5;
-                    connection.PlayersOnline = random.Next() % connection.MaxPlayers;
-                }
-
-                return connection;
-            }
+            return connection;
         }
     }
 }

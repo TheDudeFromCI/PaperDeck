@@ -17,14 +17,6 @@ namespace PaperDeck.Menu.ServerList
         void Awake()
         {
             //TODO Load from config
-
-            for (int i = 0; i < 5; i++)
-            {
-                var name = RandomString(random.Next() % 20 + 3);
-                var ip = RandomString(random.Next() % 15 + 5);
-
-                AddServer(name, ip, false);
-            }
         }
 
         public void AddServer(string name, string ip, bool save = true)
