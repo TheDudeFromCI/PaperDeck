@@ -19,5 +19,9 @@
     "**/*.csproj": true,
     "**/*.sln": true
   },
-  "cSpell.words": ["Behaviour"]
+  "cSpell.words": [
+    "Behaviour",
+    "paperdeck"
+  ],
+  "java.configuration.updateBuildConfiguration": "automatic"
 }
