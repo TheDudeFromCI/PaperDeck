@@ -1,4 +1,4 @@
-package net.whg.paperdeck;
+package net.whg.paperdeck.net;
 
 import net.whg.we.main.ILoopAction;
 import net.whg.we.main.PipelineConstants;

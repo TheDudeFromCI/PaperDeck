@@ -9,6 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.whg.paperdeck.core.GameServer;
 
 /**
  * The main PaperDeck server entry point.

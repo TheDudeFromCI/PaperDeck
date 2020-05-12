@@ -1,4 +1,4 @@
-package net.whg.paperdeck;
+package net.whg.paperdeck.core;
 
 import java.io.IOException;
 import org.slf4j.Logger;
@@ -11,6 +11,10 @@ import net.whg.we.main.TimerAction;
 import net.whg.we.net.server.IServer;
 import net.whg.we.net.server.SimpleServer;
 import net.whg.we.net.packets.PacketDataHandler;
+import net.whg.we.net.packets.PacketFactory;
+import net.whg.paperdeck.net.ClientReceiver;
+import net.whg.paperdeck.net.HandleServerPacketsAction;
+import net.whg.paperdeck.util.SyncFPSAction;
 
 public class GameServer
 {
@@ -26,9 +30,11 @@ public class GameServer
         gameLoop.addAction(new TimerAction(timer));
         gameLoop.addAction(new SyncFPSAction(timer, 10f));
 
+        var packetFactory = new PacketFactory();
+
         var server = new SimpleServer();
         server.setClientHandler(new ClientReceiver());
-        server.setDataHandler(new PacketDataHandler());
+        server.setDataHandler(new PacketDataHandler(packetFactory));
         gameLoop.addAction(new HandleServerPacketsAction(server));
 
         server.start(new ServerSocketAPI(), port);
