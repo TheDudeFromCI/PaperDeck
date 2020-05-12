@@ -10,6 +10,7 @@ import net.whg.we.main.Timer;
 import net.whg.we.main.TimerAction;
 import net.whg.we.net.server.IServer;
 import net.whg.we.net.server.SimpleServer;
+import net.whg.we.net.packets.PacketDataHandler;
 
 public class GameServer
 {
@@ -26,6 +27,8 @@ public class GameServer
         gameLoop.addAction(new SyncFPSAction(timer, 10f));
 
         var server = new SimpleServer();
+        server.setClientHandler(new ClientReceiver());
+        server.setDataHandler(new PacketDataHandler());
         gameLoop.addAction(new HandleServerPacketsAction(server));
 
         server.start(new ServerSocketAPI(), port);
