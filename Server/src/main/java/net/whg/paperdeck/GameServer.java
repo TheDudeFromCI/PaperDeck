@@ -23,6 +23,7 @@ public class GameServer
 
         var timer = new Timer(new TimeSupplierApi());
         gameLoop.addAction(new TimerAction(timer));
+        gameLoop.addAction(new SyncFPSAction(timer, 10f));
 
         var server = new SimpleServer();
         gameLoop.addAction(new HandleServerPacketsAction(server));
