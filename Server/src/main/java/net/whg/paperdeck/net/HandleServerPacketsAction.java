@@ -4,6 +4,8 @@ import net.whg.we.main.ILoopAction;
 import net.whg.we.main.PipelineConstants;
 import net.whg.we.net.server.IServer;
 
+// TODO Remove this in WraithEngine Build29
+
 /**
  * Calls the server to handle all currently received packets since the previous
  * frame.

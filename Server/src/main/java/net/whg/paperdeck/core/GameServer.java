@@ -14,7 +14,7 @@ import net.whg.we.net.packets.PacketDataHandler;
 import net.whg.we.net.packets.PacketFactory;
 import net.whg.paperdeck.net.ClientReceiver;
 import net.whg.paperdeck.net.HandleServerPacketsAction;
-import net.whg.paperdeck.util.SyncFPSAction;
+import net.whg.paperdeck.util.FramerateLimiterAction;
 
 public class GameServer
 {
@@ -28,7 +28,7 @@ public class GameServer
 
         var timer = new Timer(new TimeSupplierApi());
         gameLoop.addAction(new TimerAction(timer));
-        gameLoop.addAction(new SyncFPSAction(timer, 10f));
+        gameLoop.addAction(new FramerateLimiterAction(timer, 10f));
 
         var packetFactory = new PacketFactory();
 
