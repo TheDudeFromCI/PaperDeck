@@ -42,6 +42,8 @@
     "**/*.meta": true,
     "**/*.prefab": true,
     "**/*.unity": true,
+    "**/*.csproj": true,
+    "**/*.sln": true,
     "Build/": true,
     "Library/": true,
     "Obj/": true,
@@ -50,9 +52,5 @@
     "ProjectSettings/": true,
     "Packages/": true
   },
-  "cSpell.words": [
-    "Behaviour",
-    "MOTD",
-    "paperdeck"
-  ]
+  "cSpell.words": ["Behaviour", "MOTD", "paperdeck"]
 }

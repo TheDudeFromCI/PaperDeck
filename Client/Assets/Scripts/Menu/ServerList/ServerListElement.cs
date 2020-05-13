@@ -83,8 +83,7 @@ namespace PaperDeck.Menu.ServerList
 
                 m_PlayerList.SetActive(true);
                 m_PlayerListValue.text = $"{connection.MOTD.CurrentPlayers}/{connection.MOTD.MaxPlayers}";
-
-                Debug.Log($"Message of the Day: '{connection.MOTD.Message}'");
+                m_IPTextBox.text = connection.MOTD.Message;
             }
             else
                 m_ConnectionImage.sprite = m_FailedToConnectIcon;
