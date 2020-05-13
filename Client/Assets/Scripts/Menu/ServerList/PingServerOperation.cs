@@ -1,41 +1,46 @@
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
+
+using PaperDeck.Network;
+using PaperDeck.Packets;
 
 namespace PaperDeck.Menu.ServerList
 {
     public class PingServerOperation
     {
-        private readonly string m_IP;
-        private readonly int m_Port;
+        private readonly PacketHandler m_PacketHandler;
+
+        public Connection Connection { get; }
 
         public PingServerOperation(string ip, int port)
         {
-            m_IP = ip;
-            m_Port = port;
+            Connection = new Connection(ip, port);
+            m_PacketHandler = PacketHandler.CreateDefaultHandler();
         }
 
-        public void Connect()
+        public ServerMOTD SendPing()
         {
-            var hostEntry = Dns.GetHostEntry(m_IP);
-            foreach (IPAddress address in hostEntry.AddressList)
+            var ping = new PingServerPacket();
+            m_PacketHandler.WritePacket(Connection.Writer, ping);
+
+            var pong = m_PacketHandler.ReadPacket(Connection.Reader) as PongServerPacket;
+            if (pong == null)
+                throw new System.Exception("Unexpected packet received!");
+
+            var motd = new ServerMOTD
             {
-                var ipe = new IPEndPoint(address, m_Port);
-                var socket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                var result = socket.BeginConnect(m_IP, m_Port, null, null);
+                Message = pong.MOTD,
+                MaxPlayers = pong.MaxPlayers,
+                CurrentPlayers = pong.CurrentPlayers,
+                IconData = pong.IconData,
+            };
 
-                bool success = result.AsyncWaitHandle.WaitOne(5000, true);
-                if (socket.Connected)
-                {
-                    // TODO Setup packet system for downloading server details.
+            return motd;
+        }
 
-                    socket.EndConnect(result);
-                    return;
-                }
-
-                socket.Close();
-            }
-
-            throw new System.Exception("Failed to connect to server!");
+        public void Close()
+        {
+            Connection.Close();
         }
     }
 }

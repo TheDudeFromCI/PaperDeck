@@ -13,7 +13,7 @@ namespace PaperDeck.Menu.ServerList
 
         private readonly List<ServerListElement> m_Elements = new List<ServerListElement>();
         private RectTransform m_RectTransform;
-        private int m_Index;
+        private int m_Index = -1;
 
         public ServerListElement Selected => m_Index == -1 ? null : m_Elements[m_Index];
 

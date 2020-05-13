@@ -4,9 +4,8 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/CVS": true,
-    "**/.DS_Store": true
+    "**/.DS_Store": true,
+    "target": true
   },
-  "cSpell.words": [
-    "motd"
-  ]
+  "cSpell.words": ["motd"]
 }

@@ -82,7 +82,9 @@ namespace PaperDeck.Menu.ServerList
                 m_ConnectionImage.sprite = m_ConnectedIcon;
 
                 m_PlayerList.SetActive(true);
-                m_PlayerListValue.text = $"{connection.PlayersOnline}/{connection.MaxPlayers}";
+                m_PlayerListValue.text = $"{connection.MOTD.CurrentPlayers}/{connection.MOTD.MaxPlayers}";
+
+                Debug.Log($"Message of the Day: '{connection.MOTD.Message}'");
             }
             else
                 m_ConnectionImage.sprite = m_FailedToConnectIcon;
@@ -111,7 +113,7 @@ namespace PaperDeck.Menu.ServerList
             StartCoroutine(m_ServerConnectionCoroutine);
         }
 
-        private (string address, int port) ParseIP(string ip)
+        private(string address, int port) ParseIP(string ip)
         {
             var port = 23404;
 
@@ -127,18 +129,14 @@ namespace PaperDeck.Menu.ServerList
 
         ServerConnection ConnectToServer(ServerConnection connection)
         {
-            var ip = ParseIP(connection.IP);
-            var pingOp = new PingServerOperation(ip.address, ip.port);
-
             try
             {
-                pingOp.Connect();
-
-                // TODO Load server details
+                var ip = ParseIP(connection.IP);
+                var pingOp = new PingServerOperation(ip.address, ip.port);
+                var motd = pingOp.SendPing();
 
                 connection.IsOnline = true;
-                connection.MaxPlayers = 50;
-                connection.PlayersOnline = 2;
+                connection.MOTD = motd;
             }
             catch (System.Exception)
             {
