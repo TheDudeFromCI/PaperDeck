@@ -6,7 +6,7 @@
     },
     {
       "name": "Client",
-      "path": "./Client"
+      "path": "./PaperDeck"
     },
     {
       "name": "Server",
@@ -16,6 +16,7 @@
   "settings": {
     "java.configuration.updateBuildConfiguration": "automatic",
     "java.home": "/home/thedudefromci/openjdk-13/jdk-13.0.2",
-    "maven.view": "flat"
+    "maven.view": "flat",
+    "omnisharp.path": "latest"
   }
 }

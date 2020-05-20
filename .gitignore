@@ -1,11 +1,11 @@
-/Client/Library
-/Client/Temp
-/Client/Obj
-/Client/Build
-/Client/Builds
-/Client/Logs
+/PaperDeck/Library
+/PaperDeck/Temp
+/PaperDeck/Obj
+/PaperDeck/Build
+/PaperDeck/Builds
+/PaperDeck/Logs
 
-!/Client/Assets/**/*.meta
+!/PaperDeck/Assets/**/*.meta
 
 *.csproj
 *.sln
