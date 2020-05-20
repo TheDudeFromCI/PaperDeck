@@ -21,5 +21,4 @@ sysinfo.txt
 
 crashlytics-build.properties
 
-*.code-workspace
 /Server/target

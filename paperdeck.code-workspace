@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "name": "Root",
+      "path": "."
+    },
+    {
+      "name": "Client",
+      "path": "./Client"
+    },
+    {
+      "name": "Server",
+      "path": "./Server"
+    }
+  ],
+  "settings": {
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.home": "/home/thedudefromci/openjdk-13/jdk-13.0.2",
+    "maven.view": "flat"
+  }
+}
