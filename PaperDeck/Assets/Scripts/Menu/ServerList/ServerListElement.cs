@@ -112,7 +112,7 @@ namespace PaperDeck.Menu.ServerList
             StartCoroutine(m_ServerConnectionCoroutine);
         }
 
-        private(string address, int port) ParseIP(string ip)
+        private (string address, int port) ParseIP(string ip)
         {
             var port = 23404;
 

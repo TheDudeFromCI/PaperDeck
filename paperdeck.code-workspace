@@ -6,11 +6,11 @@
     },
     {
       "name": "Client",
-      "path": "./PaperDeck"
+      "path": "PaperDeck"
     },
     {
       "name": "Server",
-      "path": "./Server"
+      "path": "Server"
     }
   ],
   "settings": {

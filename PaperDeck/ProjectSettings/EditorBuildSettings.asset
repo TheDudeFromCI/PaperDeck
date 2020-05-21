@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ServerList.unity
     guid: dc2b6f8896547b6df8dad1b5bab0c24b
+  - enabled: 1
+    path: Assets/Scenes/ServerHub.unity
+    guid: b28533f8b9e60ffca8f187c5e0a3478b
+  - enabled: 1
+    path: Assets/Scenes/CardBuilder.unity
+    guid: c8801ab0f3c868a3aa43784346ce39ce
   m_configObjects: {}
