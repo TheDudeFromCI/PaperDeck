@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace PaperDeck.Menu.ServerList
+namespace PaperDeck.Menu.Util
 {
+    /// <summary>
+    /// Fixes a list element within a stretched vertical layout.
+    /// </summary>
     [ExecuteInEditMode]
     public class ElementWidthFix : MonoBehaviour
     {
@@ -10,17 +13,26 @@ namespace PaperDeck.Menu.ServerList
         private RectTransform m_ParentRect;
         private VerticalLayoutGroup m_LayoutGroup;
 
-        void OnEnable()
+        /// <summary>
+        /// Called when the behaviour is enabled.
+        /// </summary>
+        protected virtual void OnEnable()
         {
             UpdateWidth();
         }
 
-        void OnRectTransformDimensionsChange()
+        /// <summary>
+        /// Called when the parent element resizes this element.
+        /// </summary>
+        protected virtual void OnRectTransformDimensionsChange()
         {
             UpdateWidth();
         }
 
-        private void UpdateWidth()
+        /// <summary>
+        /// Updates the width to match the parent.
+        /// </summary>
+        protected void UpdateWidth()
         {
             if (m_LayoutGroup == null || m_Rect == null || m_ParentRect == null)
             {

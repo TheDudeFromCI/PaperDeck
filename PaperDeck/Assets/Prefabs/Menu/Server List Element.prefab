@@ -750,7 +750,6 @@ GameObject:
   - component: {fileID: 5824522942833338095}
   - component: {fileID: 5824522942833338097}
   - component: {fileID: 5824522942833338094}
-  - component: {fileID: 5824522942833338096}
   - component: {fileID: 6201931631912775005}
   m_Layer: 5
   m_Name: Server List Element
@@ -819,18 +818,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5824522942833338096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5824522942833338092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74be1ed50c7b67b2191bc30997d95ab6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &6201931631912775005
 MonoBehaviour:
   m_ObjectHideFlags: 0

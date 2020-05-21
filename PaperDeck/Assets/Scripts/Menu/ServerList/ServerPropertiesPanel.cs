@@ -8,25 +8,28 @@ namespace PaperDeck.Menu.ServerList
 {
     public class ServerPropertiesPanel : MonoBehaviour
     {
-        [SerializeField] private TMP_InputField m_NameInput;
-        [SerializeField] private TMP_InputField m_IPInput;
-        [SerializeField] private TextMeshProUGUI m_AddServerButton;
-        [SerializeField] private TextMeshProUGUI m_RemoveServerButton;
-        [SerializeField] private GameObject m_RemoveServerButtonRoot;
-        [SerializeField] private ServerListPopulator m_ServerListPopulator;
+        [SerializeField] protected TMP_InputField m_NameInput;
+        [SerializeField] protected TMP_InputField m_IPInput;
+        [SerializeField] protected TextMeshProUGUI m_AddServerButton;
+        [SerializeField] protected TextMeshProUGUI m_RemoveServerButton;
+        [SerializeField] protected GameObject m_RemoveServerButtonRoot;
+        [SerializeField] protected ServerList m_ServerList;
 
-        private ServerListElement m_Selected;
-
-        void Awake()
+        /// <summary>
+        /// Called when the properties panel is constructed to correct the text display.
+        /// </summary>
+        protected virtual void Awake()
         {
-            OnElementSelectionChanged(null);
+            OnElementSelectionChanged();
         }
 
-        public void OnElementSelectionChanged(ServerListElement selection)
+        /// <summary>
+        /// Called whenever the selected element in the server list is changed.
+        /// </summary>
+        /// <param name="selection">The new selected element.</param>
+        public void OnElementSelectionChanged()
         {
-            m_Selected = selection;
-
-            if (selection == null)
+            if (m_ServerList.Selected == null)
             {
                 m_NameInput.text = "";
                 m_IPInput.text = "";
@@ -36,8 +39,8 @@ namespace PaperDeck.Menu.ServerList
             }
             else
             {
-                m_NameInput.text = selection.ServerName;
-                m_IPInput.text = selection.ServerIP;
+                m_NameInput.text = m_ServerList.Selected.ServerName;
+                m_IPInput.text = m_ServerList.Selected.ServerIP;
 
                 m_AddServerButton.text = "Apply Changes";
                 m_RemoveServerButton.text = "Remove Server";
@@ -45,36 +48,45 @@ namespace PaperDeck.Menu.ServerList
             }
         }
 
+        /// <summary>
+        /// Called when the add server button is clicked to add or edit a server in the list.
+        /// </summary>
         public void AddServerButton()
         {
-            if (m_Selected == null)
+            if (m_ServerList.Selected == null)
             {
-                m_ServerListPopulator.AddServer(m_NameInput.text, m_IPInput.text);
+                m_ServerList.AddServer(m_NameInput.text, m_IPInput.text);
 
                 m_NameInput.text = "";
                 m_IPInput.text = "";
             }
             else
             {
-                m_Selected.ServerName = m_NameInput.text;
-                m_Selected.ServerIP = m_IPInput.text;
-                m_Selected.TryReconnect();
+                m_ServerList.Selected.ServerName = m_NameInput.text;
+                m_ServerList.Selected.ServerIP = m_IPInput.text;
+                m_ServerList.Selected.TryReconnect();
             }
         }
 
+        /// <summary>
+        /// Called when the remove server button is clicked to remove a server from the list.
+        /// </summary>
         public void RemoveServerButton()
         {
-            if (m_Selected == null)
+            if (m_ServerList.Selected == null)
                 return;
 
-            m_ServerListPopulator.RemoveServer(m_Selected);
+            m_ServerList.RemoveServer(m_ServerList.Selected);
             m_NameInput.text = "";
             m_IPInput.text = "";
         }
 
+        /// <summary>
+        /// Triggers the selected server to attempt to reconnect.
+        /// </summary>
         public void RefreshServerButton()
         {
-            m_Selected?.TryReconnect();
+            m_ServerList.Selected?.TryReconnect();
         }
     }
 }

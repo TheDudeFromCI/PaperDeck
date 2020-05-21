@@ -53,5 +53,7 @@
     "ProjectSettings/": true,
     "Packages/": true
   },
-  "cSpell.words": ["Behaviour", "MOTD", "paperdeck"]
+  "cSpell.words": [
+    "UGUI"
+  ]
 }
