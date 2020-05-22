@@ -6,6 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using PaperDeck.Menu.Util;
+using PaperDeck.Packets;
+using PaperDeck.Network;
 
 #pragma warning disable 649
 
@@ -81,12 +83,8 @@ namespace PaperDeck.Menu.ServerList
         /// <returns>The coroutine operation.</returns>
         private IEnumerator DoCheckServerStatus()
         {
-            var connection = new ServerConnection
-            {
-                Name = m_ServerName,
-                IP = m_ServerIP,
-            };
-            var pingServerTask = Task.Run(() => ConnectToServer(connection));
+            var (address, port) = ParseIP(ServerIP);
+            var pingServerTask = Task.Run(() => ConnectToServer(address, port));
 
             var rect = m_ConnectionImage.GetComponent<RectTransform>();
             while (!pingServerTask.IsCompleted)
@@ -96,14 +94,14 @@ namespace PaperDeck.Menu.ServerList
             }
             rect.rotation = Quaternion.identity;
 
-            connection = pingServerTask.Result;
+            var connection = pingServerTask.Result;
             if (connection.IsOnline)
             {
                 m_ConnectionImage.sprite = m_ConnectedIcon;
 
                 m_PlayerList.SetActive(true);
-                m_PlayerListValue.text = $"{connection.MOTD.CurrentPlayers}/{connection.MOTD.MaxPlayers}";
-                m_IPTextBox.text = connection.MOTD.Message;
+                m_PlayerListValue.text = $"{connection.CurrentPlayers}/{connection.MaxPlayers}";
+                m_IPTextBox.text = connection.MOTD;
             }
             else
                 m_ConnectionImage.sprite = m_FailedToConnectIcon;
@@ -151,23 +149,41 @@ namespace PaperDeck.Menu.ServerList
         /// </summary>
         /// <param name="connection">The server connection data.</param>
         /// <returns>The retrieved connection data.</returns>
-        private ServerConnection ConnectToServer(ServerConnection connection)
+        private ServerStatus ConnectToServer(string ip, int port)
         {
             try
             {
-                var ip = ParseIP(connection.IP);
-                var pingOp = new PingServerOperation(ip.address, ip.port);
-                var motd = pingOp.SendPing();
+                var connection = new Connection(ip, port);
+                var ping = new PingServerPacket();
 
-                connection.IsOnline = true;
-                connection.MOTD = motd;
+                var packetHandler = PacketHandler.CreateDefaultHandler();
+                packetHandler.WritePacket(connection.Writer, ping);
+
+                if (!(packetHandler.ReadPacket(connection.Reader) is PongServerPacket pong))
+                    throw new System.Exception("Unexpected packet received!");
+
+                return new ServerStatus
+                {
+                    Name = ServerName,
+                    IP = ip,
+                    Port = port,
+                    IsOnline = true,
+                    MOTD = pong.MOTD,
+                    MaxPlayers = pong.MaxPlayers,
+                    CurrentPlayers = pong.CurrentPlayers,
+                    IconData = pong.IconData,
+                };
             }
             catch (System.Exception)
             {
-                connection.IsOnline = false;
+                return new ServerStatus
+                {
+                    Name = ServerName,
+                    IP = ip,
+                    Port = port,
+                    IsOnline = false,
+                };
             }
-
-            return connection;
         }
 
         /// <inheritdoc cref="SelectionElement"/>

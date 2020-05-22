@@ -1,19 +1,23 @@
-using TMPro;
-
 using UnityEngine;
-
-#pragma warning disable 649
+using TMPro;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace PaperDeck.Menu.ServerList
 {
+    /// <summary>
+    /// Contains all of the properties for interacting with a server.
+    /// </summary>
     public class ServerPropertiesPanel : MonoBehaviour
     {
+        [Header("Game Objects")]
         [SerializeField] protected TMP_InputField m_NameInput;
         [SerializeField] protected TMP_InputField m_IPInput;
         [SerializeField] protected TextMeshProUGUI m_AddServerButton;
         [SerializeField] protected TextMeshProUGUI m_RemoveServerButton;
         [SerializeField] protected GameObject m_RemoveServerButtonRoot;
         [SerializeField] protected ServerList m_ServerList;
+        [SerializeField] protected Button m_JoinButton;
 
         /// <summary>
         /// Called when the properties panel is constructed to correct the text display.
@@ -36,6 +40,7 @@ namespace PaperDeck.Menu.ServerList
 
                 m_AddServerButton.text = "Add Server";
                 m_RemoveServerButtonRoot.SetActive(false);
+                m_JoinButton.interactable = false;
             }
             else
             {
@@ -45,6 +50,7 @@ namespace PaperDeck.Menu.ServerList
                 m_AddServerButton.text = "Apply Changes";
                 m_RemoveServerButton.text = "Remove Server";
                 m_RemoveServerButtonRoot.SetActive(true);
+                m_JoinButton.interactable = true;
             }
         }
 
@@ -87,6 +93,25 @@ namespace PaperDeck.Menu.ServerList
         public void RefreshServerButton()
         {
             m_ServerList.Selected?.TryReconnect();
+        }
+
+        /// <summary>
+        /// Loads the title screen scene.
+        /// </summary>
+        public void ToTitleScreen()
+        {
+            SceneManager.LoadScene("TitleScreen");
+        }
+
+        /// <summary>
+        /// Joins the selected server.
+        /// </summary>
+        public void JoinServer()
+        {
+            if (m_ServerList.Selected == null)
+                return;
+
+            // TODO Connect to server.
         }
     }
 }

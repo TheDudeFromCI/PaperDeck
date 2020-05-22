@@ -8,6 +8,7 @@ namespace PaperDeck.Network
     public class Connection
     {
         private readonly TcpClient m_TCP;
+        private readonly NetworkStream m_Stream;
 
         /// <summary>
         /// Gets the data reader for the input stream of this socket.
@@ -27,26 +28,33 @@ namespace PaperDeck.Network
         public bool IsOpen => m_TCP.Connected;
 
         /// <summary>
-        /// Creates a new socket connection to the given host and port number.
+        /// Creates a new container for the given tcp client.
         /// </summary>
-        /// <param name="ip">The host IP address.</param>
-        /// <param name="port">The host port number.</param>
-        public Connection(string ip, int port)
+        /// <param name="tcp">The TCP Client.</param>
+        public Connection(TcpClient tcp)
         {
-            m_TCP = new TcpClient(ip, port);
-            var stream = m_TCP.GetStream();
+            m_TCP = tcp;
+            m_Stream = m_TCP.GetStream();
 
-            Reader = new DataInput(stream);
-            Writer = new DataOutput(stream);
+            Reader = new DataInput(m_Stream);
+            Writer = new DataOutput(m_Stream);
         }
+
+        /// <summary>
+        /// Creates a new container for the given ip address.
+        /// </summary>
+        /// <param name="ip">The IP to connect to.</param>
+        /// <param name="port">The port to connect to.</param>
+        public Connection(string ip, int port)
+            : this(new TcpClient(ip, port)) { }
 
         /// <summary>
         /// Closes this connection.
         /// </summary>
         public void Close()
         {
-            if (IsOpen)
-                m_TCP.Close();
+            m_Stream.Close();
+            m_TCP.Close();
         }
     }
 }

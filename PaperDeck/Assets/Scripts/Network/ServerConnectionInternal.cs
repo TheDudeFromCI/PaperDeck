@@ -6,28 +6,24 @@ using UnityEngine;
 namespace PaperDeck.Network
 {
     /// <summary>
-    /// Represents a long-lived connection to a server.
+    /// Represents a high level connection to a server.
     /// </summary>
     public class ServerConnection : MonoBehaviour
     {
         /// <summary>
         /// Creates a new server connection behaviour and adds it to the given game object.
         /// </summary>
-        /// <param name="gameObject">The game object to add to.</param>
-        /// <param name="ip">The IP address to connect to.</param>
-        /// <param name="port">The port number to connect to.</param>
+        /// <param name="connection">The active connection to wrap around.</param>
         /// <returns>The newly created ServerConnection behaviour.</returns>
-        public static ServerConnection CreateBehaviour(GameObject gameObject, string ip, int port)
+        internal static ServerConnection CreateBehaviour(GameObject gameObject, Connection connection)
         {
-            var connection = new Connection(ip, port);
+            var behaviour = gameObject.AddComponent<ServerConnection>();
+            behaviour.m_Connection = connection;
+            behaviour.m_PacketHandler = PacketHandler.CreateDefaultHandler();
 
-            var b = gameObject.AddComponent<ServerConnection>();
-            b.m_Connection = connection;
-            b.m_PacketHandler = PacketHandler.CreateDefaultHandler();
+            Task.Run(behaviour.ReadPackets);
 
-            Task.Run(b.ReadPackets);
-
-            return b;
+            return behaviour;
         }
 
         /// <summary>
@@ -37,6 +33,7 @@ namespace PaperDeck.Network
         public static ServerConnection Instance => FindObjectOfType<ServerConnection>();
 
         private readonly ConcurrentQueue<IPacket> m_ReceivedPackets = new ConcurrentQueue<IPacket>();
+        private volatile bool m_ConnectionActive = true;
         private Connection m_Connection;
         private PacketHandler m_PacketHandler;
 
@@ -50,7 +47,12 @@ namespace PaperDeck.Network
         /// </summary>
         public void Logout()
         {
+            m_ConnectionActive = false;
             m_Connection.Close();
+
+            Destroy(gameObject);
+
+            NotifyServerClosed();
         }
 
         /// <summary>
@@ -59,8 +61,15 @@ namespace PaperDeck.Network
         /// <param name="packet">The packet to send.</param>
         public void SendPacket(IPacket packet)
         {
-            if (m_Connection.IsOpen)
+            try
+            {
                 m_PacketHandler.WritePacket(m_Connection.Writer, packet);
+            }
+            catch (System.ObjectDisposedException)
+            {
+                // Server closed.
+                Logout();
+            }
         }
 
         /// <summary>
@@ -68,10 +77,19 @@ namespace PaperDeck.Network
         /// </summary>
         private void ReadPackets()
         {
-            while (m_Connection.IsOpen)
+            try
             {
-                var packet = m_PacketHandler.ReadPacket(m_Connection.Reader);
-                m_ReceivedPackets.Enqueue(packet);
+                while (m_ConnectionActive)
+                {
+                    var packet = m_PacketHandler.ReadPacket(m_Connection.Reader);
+                    m_ReceivedPackets.Enqueue(packet);
+                }
+            }
+            catch (System.ObjectDisposedException)
+            {
+                // Server closed.
+                Debug.Log("NetworkStream closed. Closing client.");
+                m_ConnectionActive = false;
             }
         }
 
@@ -80,13 +98,24 @@ namespace PaperDeck.Network
         /// </summary>
         protected virtual void FixedUpdate()
         {
-            while (true)
+            while (m_ConnectionActive)
             {
                 if (!m_ReceivedPackets.TryDequeue(out IPacket packet))
                     break;
 
                 packet.Handle();
             }
+
+            if (!m_ConnectionActive)
+                Logout();
+        }
+
+        /// <summary>
+        /// Shows a message to the user that the connection to the server was closed.
+        /// </summary>
+        private void NotifyServerClosed()
+        {
+            // TODO Show the server disconnected screen.
         }
     }
 }

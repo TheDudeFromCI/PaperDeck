@@ -50,6 +50,9 @@ namespace PaperDeck.Menu.Util
             get => m_Selected;
             private set
             {
+                if (m_Selected == value)
+                    return;
+
                 m_Selected?.SetSelected(false);
                 m_Selected = value;
                 m_Selected?.SetSelected(true);
