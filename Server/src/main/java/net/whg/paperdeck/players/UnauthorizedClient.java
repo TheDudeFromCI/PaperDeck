@@ -1,5 +1,6 @@
 package net.whg.paperdeck.players;
 
+import java.util.UUID;
 import net.whg.we.net.server.IConnectedClient;
 
 /**
@@ -9,6 +10,7 @@ import net.whg.we.net.server.IConnectedClient;
 public class UnauthorizedClient
 {
     private final IConnectedClient client;
+    private final UUID id;
     private String name;
 
     /**
@@ -20,6 +22,7 @@ public class UnauthorizedClient
     public UnauthorizedClient(IConnectedClient client)
     {
         this.client = client;
+        this.id = UUID.randomUUID();
     }
 
     /**
@@ -50,7 +53,7 @@ public class UnauthorizedClient
      */
     Player toPlayer()
     {
-        return new Player(name, client);
+        return new Player(name, id, client);
     }
 
     /**
@@ -61,5 +64,15 @@ public class UnauthorizedClient
     IConnectedClient getRawConnection()
     {
         return client;
+    }
+
+    /**
+     * Gets the ID of this client.
+     * 
+     * @return The ID.
+     */
+    public UUID getID()
+    {
+        return id;
     }
 }

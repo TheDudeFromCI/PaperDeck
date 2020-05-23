@@ -2,6 +2,8 @@ package net.whg.paperdeck.players;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.whg.paperdeck.packets.PlayerJoinedPacket;
+import net.whg.paperdeck.packets.PlayerQuitPacket;
 import net.whg.we.net.server.IConnectedClient;
 
 /**
@@ -23,8 +25,14 @@ public class PlayerList
         if (!unauthorizedClients.contains(client))
             throw new IllegalArgumentException("Unauthorized client does not exist!");
 
+        var player = client.toPlayer();
+
+        var joinPacket = new PlayerJoinedPacket(player.getName(), player.getID());
+        for (var p : onlinePlayers)
+            p.sendPacket(joinPacket);
+
         unauthorizedClients.remove(client);
-        onlinePlayers.add(client.toPlayer());
+        onlinePlayers.add(player);
     }
 
     /**
@@ -39,7 +47,13 @@ public class PlayerList
         var unauthorized = getUnauthorizedClient(client);
 
         if (player != null)
+        {
             onlinePlayers.remove(player);
+
+            var quitPacket = new PlayerQuitPacket(player.getID());
+            for (var p : onlinePlayers)
+                p.sendPacket(quitPacket);
+        }
         else if (unauthorized != null)
             unauthorizedClients.remove(unauthorized);
     }

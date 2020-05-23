@@ -1,6 +1,7 @@
 package net.whg.paperdeck.players;
 
 import java.io.IOException;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.whg.we.net.IPacket;
@@ -14,14 +15,16 @@ public class Player
     private static final Logger logger = LoggerFactory.getLogger(Player.class);
 
     private final String name;
+    private final UUID id;
     private final IConnectedClient client;
 
     /**
      * Create a new player with the given name and client connection.
      */
-    Player(String name, IConnectedClient client)
+    Player(String name, UUID id, IConnectedClient client)
     {
         this.name = name;
+        this.id = id;
         this.client = client;
     }
 
@@ -67,5 +70,25 @@ public class Player
     IConnectedClient getRawConnection()
     {
         return client;
+    }
+
+    /**
+     * Gets the ID of this player.
+     * 
+     * @return The player ID.
+     */
+    public UUID getID()
+    {
+        return id;
+    }
+
+    /**
+     * Gets the name of this player.
+     * 
+     * @return The name.
+     */
+    public String getName()
+    {
+        return name;
     }
 }
