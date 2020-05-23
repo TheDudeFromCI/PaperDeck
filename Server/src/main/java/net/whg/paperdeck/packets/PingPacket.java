@@ -1,11 +1,13 @@
 package net.whg.paperdeck.packets;
 
+import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.whg.we.net.IPacketSender;
 import net.whg.we.net.packets.IBinaryPacket;
+import net.whg.we.net.packets.IPacketInitializer;
 import net.whg.we.net.server.IConnectedClient;
 
 /**
@@ -15,8 +17,25 @@ import net.whg.we.net.server.IConnectedClient;
 public class PingPacket implements IBinaryPacket
 {
     private static final Logger logger = LoggerFactory.getLogger(PingPacket.class);
+    private static final long PACKET_ID = 1737784354144256L;
 
-    public static final long PACKET_ID = 1737784354144256L;
+    /**
+     * Initializes received ping packets.
+     */
+    public static class Initializer implements IPacketInitializer<PingPacket>
+    {
+        @Override
+        public long getPacketID()
+        {
+            return PACKET_ID;
+        }
+
+        @Override
+        public PingPacket loadPacket(DataInput input, IPacketSender sender) throws IOException
+        {
+            return new PingPacket(sender);
+        }
+    }
 
     private final IPacketSender sender;
 

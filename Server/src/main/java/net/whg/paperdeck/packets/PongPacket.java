@@ -10,7 +10,7 @@ import net.whg.we.net.packets.IBinaryPacket;
  */
 public class PongPacket implements IBinaryPacket
 {
-    public static final long PACKET_ID = 8181459344949248L;
+    private static final long PACKET_ID = 8181459344949248L;
 
     private final String motd;
     private final int maxPlayers;
