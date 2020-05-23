@@ -12,15 +12,25 @@ import net.whg.we.net.server.IServer;
 import net.whg.we.net.server.SimpleServer;
 import net.whg.we.net.packets.PacketDataHandler;
 import net.whg.we.net.packets.PacketFactory;
-import net.whg.paperdeck.net.ClientReceiver;
 import net.whg.paperdeck.net.HandleServerPacketsAction;
 import net.whg.paperdeck.packets.PingPacketInitializer;
+import net.whg.paperdeck.players.PlayerList;
+import net.whg.paperdeck.players.ClientReceiver;
 import net.whg.paperdeck.util.FramerateLimiterAction;
 
 public class GameServer
 {
     private static final Logger logger = LoggerFactory.getLogger(GameServer.class);
 
+    /**
+     * Creates the game server object and starts the server thread.
+     * 
+     * @param port
+     *     - The port to open the server on.
+     * @return The game server.
+     * @throws IOException
+     *     If the server could not be started.
+     */
     public static GameServer initialize(int port) throws IOException
     {
         logger.info("Starting PaperDeck server on port {}", port);
@@ -35,14 +45,16 @@ public class GameServer
         packetFactory.register(new PingPacketInitializer());
 
         var server = new SimpleServer();
-        server.setClientHandler(new ClientReceiver());
+        var playerList = new PlayerList();
+        server.setClientHandler(new ClientReceiver(playerList));
         server.setDataHandler(new PacketDataHandler(packetFactory));
         gameLoop.addAction(new HandleServerPacketsAction(server));
 
         server.start(new ServerSocketAPI(), port);
-        return new GameServer(server, gameLoop, timer);
+        return new GameServer(server, gameLoop, timer, playerList);
     }
 
+    private final PlayerList playerList;
     private final IServer server;
     private final SceneGameLoop gameLoop;
     private final Timer timer;
@@ -57,11 +69,12 @@ public class GameServer
      * @param timer
      *     - The timer managing the game loop.
      */
-    private GameServer(IServer server, SceneGameLoop gameLoop, Timer timer)
+    private GameServer(IServer server, SceneGameLoop gameLoop, Timer timer, PlayerList playerList)
     {
         this.server = server;
         this.gameLoop = gameLoop;
         this.timer = timer;
+        this.playerList = playerList;
     }
 
     /**
@@ -82,5 +95,15 @@ public class GameServer
     {
         gameLoop.stop();
         server.stop();
+    }
+
+    /**
+     * Gets the player list for this game server.
+     * 
+     * @return The player list.
+     */
+    public PlayerList getPlayerList()
+    {
+        return playerList;
     }
 }
