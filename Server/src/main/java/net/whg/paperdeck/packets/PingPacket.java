@@ -52,7 +52,7 @@ public class PingPacket implements IBinaryPacket
         try
         {
             var client = (IConnectedClient) sender;
-            client.writePacket(packet);
+            client.sendPacket(packet);
             client.kick();
         }
         catch (IOException e)

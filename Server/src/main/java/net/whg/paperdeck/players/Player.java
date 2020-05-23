@@ -50,7 +50,7 @@ public class Player
     {
         try
         {
-            client.writePacket(packet);
+            client.sendPacket(packet);
         }
         catch (IOException e)
         {

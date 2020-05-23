@@ -57,21 +57,13 @@ public class PongPacket implements IBinaryPacket
     }
 
     @Override
-    public void write(DataOutput out)
+    public void write(DataOutput out) throws IOException
     {
-        try
-        {
-            out.writeInt(motd.length());
-            out.writeChars(motd);
-            out.writeInt(maxPlayers);
-            out.writeInt(currentPlayers);
-            out.writeInt(iconData.length);
-            out.write(iconData);
-        }
-        catch (IOException e)
-        {
-            // TODO Remove this in WraithEngine Build29
-            e.printStackTrace();
-        }
+        out.writeInt(motd.length());
+        out.writeChars(motd);
+        out.writeInt(maxPlayers);
+        out.writeInt(currentPlayers);
+        out.writeInt(iconData.length);
+        out.write(iconData);
     }
 }

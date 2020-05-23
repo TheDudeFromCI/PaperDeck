@@ -28,7 +28,7 @@
     <dependency>
       <groupId>net.whg</groupId>
       <artifactId>wraithengine</artifactId>
-      <version>build_28</version>
+      <version>build_31</version>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>

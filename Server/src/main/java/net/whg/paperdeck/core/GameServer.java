@@ -4,7 +4,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import net.whg.we.external.ServerSocketAPI;
-import net.whg.we.external.TimeSupplierApi;
+import net.whg.we.external.TimeSupplierAPI;
 import net.whg.we.main.SceneGameLoop;
 import net.whg.we.main.Timer;
 import net.whg.we.main.TimerAction;
@@ -12,11 +12,11 @@ import net.whg.we.net.server.IServer;
 import net.whg.we.net.server.SimpleServer;
 import net.whg.we.net.packets.PacketDataHandler;
 import net.whg.we.net.packets.PacketFactory;
-import net.whg.paperdeck.net.HandleServerPacketsAction;
+import net.whg.lib.actions.FramerateLimiterAction;
+import net.whg.lib.actions.HandleServerPacketsAction;
 import net.whg.paperdeck.packets.PingPacketInitializer;
 import net.whg.paperdeck.players.PlayerList;
 import net.whg.paperdeck.players.ClientReceiver;
-import net.whg.paperdeck.util.FramerateLimiterAction;
 
 public class GameServer
 {
@@ -37,7 +37,7 @@ public class GameServer
 
         var gameLoop = new SceneGameLoop();
 
-        var timer = new Timer(new TimeSupplierApi());
+        var timer = new Timer(new TimeSupplierAPI());
         gameLoop.addAction(new TimerAction(timer));
         gameLoop.addAction(new FramerateLimiterAction(timer, 10f));
 
