@@ -38,6 +38,7 @@ namespace PaperDeck.Menu.ServerList
         protected Color m_DefaultColor;
         protected string m_ServerName;
         protected string m_ServerIP;
+        protected int m_Port;
         protected IEnumerator m_ServerConnectionCoroutine;
 
         /// <summary>
@@ -63,10 +64,15 @@ namespace PaperDeck.Menu.ServerList
             get => m_ServerIP;
             set
             {
-                m_ServerIP = value;
+                (m_ServerIP, m_Port) = ParseIP(value);
                 m_IPTextBox.text = value;
             }
         }
+
+        /// <summary>
+        /// Gets the port the server is running on.
+        /// </summary>
+        public int ServerPort => m_Port;
 
         /// <summary>
         /// Called when the list element is initialized to ping the server.

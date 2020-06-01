@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using PaperDeck.Network;
+using System.Collections;
 
 namespace PaperDeck.Menu.ServerList
 {
@@ -111,7 +113,30 @@ namespace PaperDeck.Menu.ServerList
             if (m_ServerList.Selected == null)
                 return;
 
-            // TODO Connect to server.
+            StartCoroutine(DoConnectToServer());
+        }
+
+        private IEnumerator DoConnectToServer()
+        {
+            var ip = m_ServerList.Selected.ServerIP;
+            var port = m_ServerList.Selected.ServerPort;
+            var conn = PendingServerConnection.Connect(ip, port);
+
+            while (conn.Status == ConnectionStatus.Connecting)
+                yield return null;
+
+            if (conn.Status == ConnectionStatus.FailedToConnect)
+            {
+                Debug.LogWarning("Failed to connect to server!");
+
+                // TODO Show connection failed status to user
+                yield break;
+            }
+            else
+            {
+                DontDestroyOnLoad(conn.gameObject);
+                SceneManager.LoadScene("ServerHub");
+            }
         }
     }
 }

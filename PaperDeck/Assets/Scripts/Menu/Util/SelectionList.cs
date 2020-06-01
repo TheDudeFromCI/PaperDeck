@@ -45,7 +45,7 @@ namespace PaperDeck.Menu.Util
         /// Gets the currently selected element within this list.
         /// </summary>
         /// <value>The selected element, or null if nothing is selected.</value>
-        public T Selected
+        public T  Selected
         {
             get => m_Selected;
             private set

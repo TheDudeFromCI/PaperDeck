@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Sockets;
 using UnityEngine;
 
@@ -49,8 +48,11 @@ namespace PaperDeck.Network
         {
             try
             {
-                var tcp = new TcpClient();
-                await tcp.ConnectAsync(m_IP, m_Port);
+                var tcp = new TcpClient(m_IP, m_Port);
+
+                // TODO Make async connection work again.
+                // With ConnectAsync(), certain addresses (I.e. "localhost") will always throw errors.
+                // await tcp.ConnectAsync();
 
                 var conn = new Connection(tcp);
                 Connection = ServerConnection.CreateBehaviour(gameObject, conn);
