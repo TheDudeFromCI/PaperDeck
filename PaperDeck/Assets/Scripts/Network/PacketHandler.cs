@@ -15,6 +15,7 @@ namespace PaperDeck.Network
             handler.Register(new PongServerPacketIO());
             handler.Register(new PlayerJoinedPacketIO(server));
             handler.Register(new PlayerQuitPacketIO(server));
+            handler.Register(new AuthPacketIO());
 
             return handler;
         }

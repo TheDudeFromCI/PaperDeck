@@ -65,7 +65,7 @@ public class PlayerList
      *     - The raw connection data.
      * @return The player, or null if there isn't one.
      */
-    private Player getPlayer(IConnectedClient client)
+    Player getPlayer(IConnectedClient client)
     {
         for (var player : onlinePlayers)
             if (player.getRawConnection() == client)
@@ -81,7 +81,7 @@ public class PlayerList
      *     - The raw connection data.
      * @return The unauthorized client, or null if there isn't one.
      */
-    private UnauthorizedClient getUnauthorizedClient(IConnectedClient client)
+    UnauthorizedClient getUnauthorizedClient(IConnectedClient client)
     {
         for (var unauthorized : unauthorizedClients)
             if (unauthorized.getRawConnection() == client)

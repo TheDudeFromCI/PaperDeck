@@ -16,6 +16,7 @@ import net.whg.lib.actions.FramerateLimiterAction;
 import net.whg.lib.actions.HandleServerPacketsAction;
 import net.whg.paperdeck.players.PlayerList;
 import net.whg.paperdeck.packets.PingPacket;
+import net.whg.paperdeck.players.AuthPacket;
 import net.whg.paperdeck.players.ClientReceiver;
 
 public class GameServer
@@ -41,11 +42,13 @@ public class GameServer
         gameLoop.addAction(new TimerAction(timer));
         gameLoop.addAction(new FramerateLimiterAction(timer, 10f));
 
-        var packetFactory = new PacketFactory();
-        packetFactory.register(new PingPacket.Initializer());
-
         var server = new SimpleServer();
         var playerList = new PlayerList();
+
+        var packetFactory = new PacketFactory();
+        packetFactory.register(new PingPacket.Initializer());
+        packetFactory.register(new AuthPacket.Initializer(playerList));
+
         server.setClientHandler(new ClientReceiver(playerList));
         server.setDataHandler(new PacketDataHandler(packetFactory));
         gameLoop.addAction(new HandleServerPacketsAction(server));

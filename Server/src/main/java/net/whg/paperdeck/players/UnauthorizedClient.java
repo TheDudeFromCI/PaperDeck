@@ -10,8 +10,8 @@ import net.whg.we.net.server.IConnectedClient;
 public class UnauthorizedClient
 {
     private final IConnectedClient client;
-    private final UUID id;
     private String name;
+    private UUID id;
 
     /**
      * Creates a new unauthorized client container for the given client.
@@ -22,7 +22,6 @@ public class UnauthorizedClient
     public UnauthorizedClient(IConnectedClient client)
     {
         this.client = client;
-        this.id = UUID.randomUUID();
     }
 
     /**
@@ -44,6 +43,11 @@ public class UnauthorizedClient
     public String getName()
     {
         return name;
+    }
+
+    void setID(String id)
+    {
+        this.id = UUID.fromString(id);
     }
 
     /**

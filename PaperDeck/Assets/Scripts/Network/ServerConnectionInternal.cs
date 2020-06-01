@@ -50,6 +50,20 @@ namespace PaperDeck.Network
         public Server Server { get; private set; }
 
         /// <summary>
+        /// Called when this connection is first initialized to send the authentication packet.
+        /// </summary>
+        protected void Start()
+        {
+            var packet = new AuthPacket
+            {
+                PlayerName = Server.ClientName,
+                PlayerID = Server.ClientID,
+            };
+
+            SendPacket(packet);
+        }
+
+        /// <summary>
         /// Logs out from the server.
         /// </summary>
         public void Logout()
@@ -66,7 +80,8 @@ namespace PaperDeck.Network
         /// Sends a packet to the server. Does nothing if connection is closed.
         /// </summary>
         /// <param name="packet">The packet to send.</param>
-        public void SendPacket(IPacket packet)
+        public void SendPacket<T>(T packet)
+        where T : IPacket
         {
             try
             {

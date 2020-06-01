@@ -44,7 +44,7 @@ namespace PaperDeck.Network
         /// <summary>
         /// Called when the behaviour is loaded to start to connection process.
         /// </summary>
-        protected async void Start()
+        protected void Start()
         {
             try
             {
