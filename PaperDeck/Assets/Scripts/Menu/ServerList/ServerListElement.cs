@@ -162,7 +162,7 @@ namespace PaperDeck.Menu.ServerList
                 var connection = new Connection(ip, port);
                 var ping = new PingServerPacket();
 
-                var packetHandler = PacketHandler.CreateDefaultHandler();
+                var packetHandler = PacketHandler.CreateDefaultHandler(null);
                 packetHandler.WritePacket(connection.Writer, ping);
 
                 if (!(packetHandler.ReadPacket(connection.Reader) is PongServerPacket pong))

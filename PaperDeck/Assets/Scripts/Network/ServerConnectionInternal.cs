@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using PaperDeck.Packets;
+using PaperDeck.ServerInfo;
 using UnityEngine;
 
 namespace PaperDeck.Network
@@ -19,7 +20,8 @@ namespace PaperDeck.Network
         {
             var behaviour = gameObject.AddComponent<ServerConnection>();
             behaviour.m_Connection = connection;
-            behaviour.m_PacketHandler = PacketHandler.CreateDefaultHandler();
+            behaviour.Server = new Server();
+            behaviour.m_PacketHandler = PacketHandler.CreateDefaultHandler(behaviour.Server);
 
             Task.Run(behaviour.ReadPackets);
 
@@ -41,6 +43,11 @@ namespace PaperDeck.Network
         /// Gets whether or not the server connection is still active.
         /// </summary>
         public bool IsConnected => m_Connection.IsOpen;
+
+        /// <summary>
+        /// Gets the server we are connected to.
+        /// </summary>
+        public Server Server { get; private set; }
 
         /// <summary>
         /// Logs out from the server.
