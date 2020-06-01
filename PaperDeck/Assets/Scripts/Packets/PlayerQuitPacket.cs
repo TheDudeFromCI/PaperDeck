@@ -8,7 +8,7 @@ namespace PaperDeck.Packets
     /// </summary>
     public class PlayerQuitPacket : IPacket
     {
-        public const long ID = 1457315249127424L;
+        public const long ID = 5699809778335744L;
 
         private readonly Server m_Server;
         private readonly string m_PlayerID;

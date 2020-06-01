@@ -8,7 +8,7 @@ namespace PaperDeck.Packets
     /// </summary>
     public class PlayerJoinedPacket : IPacket
     {
-        public const long ID = 816553308192768L;
+        public const long ID = 3172928403275776L;
 
         private readonly Server m_Server;
         private readonly string m_PlayerName;
