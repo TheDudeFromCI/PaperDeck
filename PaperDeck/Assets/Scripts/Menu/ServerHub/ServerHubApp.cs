@@ -1,5 +1,6 @@
 ﻿using PaperDeck.Network;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace PaperDeck.Menu.ServerHub
 {
@@ -23,6 +24,27 @@ namespace PaperDeck.Menu.ServerHub
 
             if (m_ServerConnection == null)
                 throw new System.InvalidOperationException("Cannot load scene without active server connection!");
+        }
+
+        public void CreateMatchButton()
+        {
+            // TODO
+        }
+
+        public void CardEditorButton()
+        {
+            SceneManager.LoadScene("CardBuilder");
+        }
+
+        public void MacroEditorButton()
+        {
+            // TODO
+        }
+
+        public void LogoutButton()
+        {
+            SceneManager.LoadScene("ServerList");
+            Destroy(ServerConnection.Instance.gameObject);
         }
     }
 }
