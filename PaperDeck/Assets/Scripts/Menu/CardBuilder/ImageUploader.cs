@@ -10,6 +10,11 @@ namespace PaperDeck.Menu.CardBuilder
         [Tooltip("The image slot on the card to upload to.")]
         [SerializeField] protected Image m_ImageTarget;
 
+        [Header("Sliders")]
+
+        [SerializeField] protected Slider m_RotationSlider;
+        [SerializeField] protected Slider m_SizeSlider;
+
         private Sprite m_LastSprite;
         private Texture2D m_Texture;
 
@@ -66,6 +71,9 @@ namespace PaperDeck.Menu.CardBuilder
             m_ImageTarget.transform.localPosition = Vector3.zero;
             m_ImageTarget.transform.localRotation = Quaternion.identity;
             m_ImageTarget.transform.localScale = Vector3.one;
+
+            m_RotationSlider.value = 0f;
+            m_SizeSlider.value = 0f;
         }
 
         /// <summary>
