@@ -120,9 +120,51 @@ public final class CardDatabaseIO
             var idLow = in.readLong();
             var id = new UUID(idHigh, idLow);
 
-            var card = new Card(id);
+            var card = new Card(id, deck);
             deck.addCard(card);
+
+            readCardInfo(in, card);
         }
+    }
+
+    /**
+     * Creates all the card information from the data input stream and writes it to
+     * the card.
+     * 
+     * @param in
+     *     - The data input stream.
+     * @param card
+     *     - The card to write to.
+     * @throws IOException
+     *     If an error occurs while reading from the data stream.
+     */
+    private static void readCardInfo(DataInput in, Card card) throws IOException
+    {
+        var keyCount = in.readInt();
+        for (int j = 0; j < keyCount; j++)
+        {
+            var key = readString(in);
+            var bytes = new byte[in.readInt()];
+            in.readFully(bytes);
+
+            card.setInfoNoSave(key, bytes);
+        }
+    }
+
+    /**
+     * Reads a string from a data input.
+     * 
+     * @return The string.
+     */
+    private static String readString(DataInput dataInput) throws IOException
+    {
+        int length = dataInput.readInt();
+        char[] chars = new char[length];
+
+        for (int i = 0; i < chars.length; i++)
+            chars[i] = dataInput.readChar();
+
+        return new String(chars);
     }
 
     /**
@@ -154,27 +196,57 @@ public final class CardDatabaseIO
     /**
      * Writes the given card deck to a data output stream.
      * 
-     * @param output
+     * @param out
      *     - The data output to write to.
      * @param deck
      *     - The deck.
      * @throws IOException
      *     If an error occurs while writing to the output.
      */
-    private static void saveDeck(DataOutput output, Deck deck) throws IOException
+    private static void saveDeck(DataOutput out, Deck deck) throws IOException
     {
-        output.writeInt(FILE_VERSION);
+        out.writeInt(FILE_VERSION);
 
         int cardCount = deck.getCardCount();
-        output.writeInt(cardCount);
+        out.writeInt(cardCount);
 
         for (int i = 0; i < cardCount; i++)
         {
-            var id = deck.getID();
+            var card = deck.getCardAt(i);
+
+            var id = card.getID();
             var idHigh = id.getMostSignificantBits();
             var idLow = id.getLeastSignificantBits();
-            output.writeLong(idHigh);
-            output.writeLong(idLow);
+            out.writeLong(idHigh);
+            out.writeLong(idLow);
+
+            saveCardInfo(out, card);
+        }
+    }
+
+    /**
+     * Writes all the information from a card to the data output stream.
+     * 
+     * @param out
+     *     - The data output stream to write to.
+     * @param card
+     *     - The card to read information from.
+     * @throws IOException
+     *     If an error occurs while writing to the output.
+     */
+    private static void saveCardInfo(DataOutput out, Card card) throws IOException
+    {
+        var keys = card.getKeys();
+        out.writeInt(keys.size());
+
+        for (var key : keys)
+        {
+            out.writeInt(key.length());
+            out.writeChars(key);
+
+            var bytes = card.getInfo(key);
+            out.write(bytes.length);
+            out.write(bytes);
         }
     }
 

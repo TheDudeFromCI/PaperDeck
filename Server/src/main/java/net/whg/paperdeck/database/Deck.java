@@ -32,7 +32,7 @@ public class Deck
      * @param id
      *     - The ID of this deck.
      */
-    public Deck(UUID id)
+    Deck(UUID id)
     {
         this.id = id;
     }
@@ -88,7 +88,7 @@ public class Deck
      * @param card
      *     - The card to add.
      */
-    public void addCard(Card card)
+    void addCard(Card card)
     {
         cards.add(card);
     }
@@ -99,7 +99,7 @@ public class Deck
      * @param card
      *     - The card to remove.
      */
-    public void removeCard(Card card)
+    void removeCard(Card card)
     {
         cards.remove(card);
     }
@@ -107,7 +107,7 @@ public class Deck
     /**
      * Saves this card deck.
      */
-    public void save()
+    void save()
     {
         CardDatabaseIO.saveDeck(this);
     }
