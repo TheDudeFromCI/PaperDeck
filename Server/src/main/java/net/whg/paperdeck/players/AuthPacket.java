@@ -5,6 +5,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.whg.paperdeck.IOUtils;
 import net.whg.we.net.IPacketSender;
 import net.whg.we.net.packets.IBinaryPacket;
 import net.whg.we.net.packets.IPacketInitializer;
@@ -39,20 +40,9 @@ public class AuthPacket implements IBinaryPacket
         @Override
         public AuthPacket loadPacket(DataInput input, IPacketSender sender) throws IOException
         {
-            var playerName = readString(input);
-            var playerID = readString(input);
+            var playerName = IOUtils.readString(input);
+            var playerID = IOUtils.readString(input);
             return new AuthPacket(sender, playerName, playerID, playerList);
-        }
-
-        private String readString(DataInput dataInput) throws IOException
-        {
-            int length = dataInput.readInt();
-            char[] chars = new char[length];
-
-            for (int i = 0; i < chars.length; i++)
-                chars[i] = dataInput.readChar();
-
-            return new String(chars);
         }
     }
 

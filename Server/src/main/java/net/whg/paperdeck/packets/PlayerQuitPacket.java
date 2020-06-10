@@ -3,6 +3,7 @@ package net.whg.paperdeck.packets;
 import java.io.DataOutput;
 import java.io.IOException;
 import java.util.UUID;
+import net.whg.paperdeck.IOUtils;
 import net.whg.we.net.IPacketSender;
 import net.whg.we.net.packets.IBinaryPacket;
 
@@ -47,7 +48,6 @@ public class PlayerQuitPacket implements IBinaryPacket
     @Override
     public void write(DataOutput writer) throws IOException
     {
-        writer.writeInt(playerID.length());
-        writer.writeChars(playerID);
+        IOUtils.writeString(writer, playerID);
     }
 }

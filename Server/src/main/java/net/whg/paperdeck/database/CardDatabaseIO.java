@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import net.whg.paperdeck.IOUtils;
 
 /**
  * A static utility class for saving and loading the card database.
@@ -105,7 +106,7 @@ public final class CardDatabaseIO
      * Loads a deck from a data input stream using the encoding for file version 1.
      * 
      * @param in
-     *     - The data input stream.
+     *     - The data input stream to read from.
      * @param deck
      *     - The card deck to write to.
      * @throws IOException
@@ -115,16 +116,29 @@ public final class CardDatabaseIO
     {
         var cardCount = in.readInt();
         for (int i = 0; i < cardCount; i++)
-        {
-            var idHigh = in.readLong();
-            var idLow = in.readLong();
-            var id = new UUID(idHigh, idLow);
+            loadCard(in, deck);
+    }
 
-            var card = new Card(id, deck);
-            deck.addCard(card);
+    /**
+     * Loads a card from a data input stream.
+     * 
+     * @param in
+     *     - The data input stream.
+     * @param deck
+     *     - The card deck to add the card to.
+     * @return The card.
+     * @throws IOException
+     *     If an error occurs while reading from the data stream.
+     */
+    public static Card loadCard(DataInput in, Deck deck) throws IOException
+    {
+        var id = IOUtils.readUUID(in);
+        var card = new Card(id, deck);
+        deck.addCard(card);
 
-            readCardInfo(in, card);
-        }
+        readCardInfo(in, card);
+
+        return card;
     }
 
     /**
@@ -143,28 +157,12 @@ public final class CardDatabaseIO
         var keyCount = in.readInt();
         for (int j = 0; j < keyCount; j++)
         {
-            var key = readString(in);
+            var key = IOUtils.readString(in);
             var bytes = new byte[in.readInt()];
             in.readFully(bytes);
 
             card.setInfoNoSave(key, bytes);
         }
-    }
-
-    /**
-     * Reads a string from a data input.
-     * 
-     * @return The string.
-     */
-    private static String readString(DataInput dataInput) throws IOException
-    {
-        int length = dataInput.readInt();
-        char[] chars = new char[length];
-
-        for (int i = 0; i < chars.length; i++)
-            chars[i] = dataInput.readChar();
-
-        return new String(chars);
     }
 
     /**
@@ -203,7 +201,7 @@ public final class CardDatabaseIO
      * @throws IOException
      *     If an error occurs while writing to the output.
      */
-    private static void saveDeck(DataOutput out, Deck deck) throws IOException
+    public static void saveDeck(DataOutput out, Deck deck) throws IOException
     {
         out.writeInt(FILE_VERSION);
 
@@ -213,15 +211,24 @@ public final class CardDatabaseIO
         for (int i = 0; i < cardCount; i++)
         {
             var card = deck.getCardAt(i);
-
-            var id = card.getID();
-            var idHigh = id.getMostSignificantBits();
-            var idLow = id.getLeastSignificantBits();
-            out.writeLong(idHigh);
-            out.writeLong(idLow);
-
-            saveCardInfo(out, card);
+            saveCard(out, card);
         }
+    }
+
+    /**
+     * Writes a given card to the data output stream.
+     * 
+     * @param out
+     *     - The data stream to write to.
+     * @param card
+     *     - The card to write.
+     * @throws IOException
+     *     If an error occurs while writing to the output.
+     */
+    public static void saveCard(DataOutput out, Card card) throws IOException
+    {
+        IOUtils.writeUUID(out, card.getID());
+        saveCardInfo(out, card);
     }
 
     /**
@@ -241,8 +248,7 @@ public final class CardDatabaseIO
 
         for (var key : keys)
         {
-            out.writeInt(key.length());
-            out.writeChars(key);
+            IOUtils.writeString(out, key);
 
             var bytes = card.getInfo(key);
             out.write(bytes.length);

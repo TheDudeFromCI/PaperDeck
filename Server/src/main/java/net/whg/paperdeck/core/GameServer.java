@@ -16,6 +16,7 @@ import net.whg.lib.actions.FramerateLimiterAction;
 import net.whg.lib.actions.HandleServerPacketsAction;
 import net.whg.paperdeck.players.PlayerList;
 import net.whg.paperdeck.database.CardDatabase;
+import net.whg.paperdeck.database.CardPacket;
 import net.whg.paperdeck.packets.PingPacket;
 import net.whg.paperdeck.players.AuthPacket;
 import net.whg.paperdeck.players.ClientReceiver;
@@ -45,16 +46,16 @@ public class GameServer
 
         var server = new SimpleServer();
         var playerList = new PlayerList();
+        var cardDatabase = new CardDatabase();
 
         var packetFactory = new PacketFactory();
         packetFactory.register(new PingPacket.Initializer());
         packetFactory.register(new AuthPacket.Initializer(playerList));
+        packetFactory.register(new CardPacket.Initializer(cardDatabase));
 
         server.setClientHandler(new ClientReceiver(playerList));
         server.setDataHandler(new PacketDataHandler(packetFactory));
         gameLoop.addAction(new HandleServerPacketsAction(server));
-
-        var cardDatabase = new CardDatabase();
 
         server.start(new ServerSocketAPI(), port);
         return new GameServer(server, gameLoop, timer, playerList, cardDatabase);
