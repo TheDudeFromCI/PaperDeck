@@ -15,6 +15,7 @@ import net.whg.we.net.packets.PacketFactory;
 import net.whg.lib.actions.FramerateLimiterAction;
 import net.whg.lib.actions.HandleServerPacketsAction;
 import net.whg.paperdeck.players.PlayerList;
+import net.whg.paperdeck.database.CardDatabase;
 import net.whg.paperdeck.packets.PingPacket;
 import net.whg.paperdeck.players.AuthPacket;
 import net.whg.paperdeck.players.ClientReceiver;
@@ -53,14 +54,17 @@ public class GameServer
         server.setDataHandler(new PacketDataHandler(packetFactory));
         gameLoop.addAction(new HandleServerPacketsAction(server));
 
+        var cardDatabase = new CardDatabase();
+
         server.start(new ServerSocketAPI(), port);
-        return new GameServer(server, gameLoop, timer, playerList);
+        return new GameServer(server, gameLoop, timer, playerList, cardDatabase);
     }
 
     private final PlayerList playerList;
     private final IServer server;
     private final SceneGameLoop gameLoop;
     private final Timer timer;
+    private final CardDatabase cardDatabase;
 
     /**
      * Creates a new game server object.
@@ -71,13 +75,19 @@ public class GameServer
      *     - The main game loop.
      * @param timer
      *     - The timer managing the game loop.
+     * @param playerList
+     *     - The list of players on this server.
+     * @param cardDatabase
+     *     - The card database.
      */
-    private GameServer(IServer server, SceneGameLoop gameLoop, Timer timer, PlayerList playerList)
+    private GameServer(IServer server, SceneGameLoop gameLoop, Timer timer, PlayerList playerList,
+            CardDatabase cardDatabase)
     {
         this.server = server;
         this.gameLoop = gameLoop;
         this.timer = timer;
         this.playerList = playerList;
+        this.cardDatabase = cardDatabase;
     }
 
     /**
@@ -108,5 +118,15 @@ public class GameServer
     public PlayerList getPlayerList()
     {
         return playerList;
+    }
+
+    /**
+     * Gets the card database.
+     * 
+     * @return The card database.
+     */
+    public CardDatabase getCardDatabase()
+    {
+        return cardDatabase;
     }
 }
